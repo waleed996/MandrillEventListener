@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mandrill Event Listener Real-time updates</title>
+</head>
+<body>
+    <h1>Mandrill Event Listener Real-time updates:</h1>
+
+    <textarea id="user_email_updates_txt_area" rows="50" cols="200"></textarea>
+
+    <script>
+        var socket = new WebSocket('ws://127.0.0.1:8000/mandrill_event_listener/ws/v1/user_email_action_updates');
+
+        // On Connection Open
+        socket.onopen = function(event) {
+            console.log("Socket Connection Opened");
+        };
+
+        // On Connection close
+        socket.onclose = function(event) {
+            console.log('WebSocket Connection Closed');
+        };
+
+        // On error
+        socket.onerror = function(e){
+            console.log("message", e)
+        };
+
+        // On Message Received
+        var update_num = 1;
+        socket.onmessage = function(event) {
+            console.log("Data Received: " + event.data);
+            document.getElementById("user_email_updates_txt_area").value += update_num + ' - ' + event.data + '\n\n';
+            update_num += 1;
+        };
+    </script>
+
+</body>
+</html>
